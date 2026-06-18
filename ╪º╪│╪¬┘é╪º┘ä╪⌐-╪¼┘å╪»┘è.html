@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إستقالة (جندي - جندي أول)</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #0f1115;
+    color: #f5f5f5;
+    font-family: "Tahoma", "Segoe UI", Arial, sans-serif;
+    padding: 40px 16px 60px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 28px;
+    text-align: center;
+    color: #ffffff;
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  label {
+    display: block;
+    font-size: 0.9rem;
+    color: #c7cad1;
+    margin-bottom: 8px;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    background: #1b1e26;
+    border: 1px solid #2b2f3a;
+    color: #f5f5f5;
+    font-size: 0.95rem;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  input[type="text"]:focus,
+  textarea:focus {
+    border-color: #4a90e2;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  .rank-toggle {
+    display: flex;
+    gap: 10px;
+  }
+
+  .rank-toggle input {
+    display: none;
+  }
+
+  .rank-toggle label {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+    background: #1b1e26;
+    border: 1px solid #2b2f3a;
+    color: #c7cad1;
+    padding: 12px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    font-size: 0.95rem;
+  }
+
+  .rank-toggle input:checked + label {
+    background: #4a90e2;
+    border-color: #4a90e2;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .actions button {
+    background: #1b1e26;
+    border: 1px solid #2b2f3a;
+    color: #f5f5f5;
+    font-size: 0.95rem;
+    padding: 14px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .actions button:hover {
+    background: #242832;
+    border-color: #3a3f4d;
+    transform: translateY(-1px);
+  }
+
+  .actions button:active {
+    transform: translateY(0);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #2ecc71;
+    color: #06210f;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 28px;
+    color: #8a8f99;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+
+  .back-link:hover {
+    color: #c7cad1;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>إستقالة (جندي - جندي أول)</h1>
+
+    <div class="field">
+      <label>الرتبة:</label>
+      <div class="rank-toggle">
+        <input type="radio" name="rank" id="rank-soldier" value="جندي" checked>
+        <label for="rank-soldier">جندي</label>
+        <input type="radio" name="rank" id="rank-soldier1" value="جندي أول">
+        <label for="rank-soldier1">جندي أول</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="decreeNumber">رقم الصادر:</label>
+      <input type="text" id="decreeNumber" placeholder="أدخل رقم الصادر">
+    </div>
+
+    <div class="field">
+      <label for="militaryId">ايدي العسكري:</label>
+      <input type="text" id="militaryId" placeholder="أدخل الآيدي">
+    </div>
+
+    <div class="field">
+      <label for="militaryName">اسم العسكري:</label>
+      <input type="text" id="militaryName" placeholder="أدخل الاسم">
+    </div>
+
+    <div class="field">
+      <label for="militaryCode">كود العسكري:</label>
+      <input type="text" id="militaryCode" placeholder="أدخل الكود بدون P- مثال: 442">
+    </div>
+
+    <div class="field">
+      <label for="resignReason">سبب الاستقالة:</label>
+      <textarea id="resignReason" placeholder="اكتب السبب هنا"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="dismissReason">رابط الصادر:</label>
+      <input type="text" id="dismissReason" placeholder="ضع الرابط هنا">
+    </div>
+
+    <div class="field">
+      <label for="custodyLink">رابط تسليم العهدة:</label>
+      <input type="text" id="custodyLink" placeholder="ضع الرابط هنا">
+    </div>
+
+    <div class="field">
+      <label for="finesLink">رابط تسديد الغرامات:</label>
+      <input type="text" id="finesLink" placeholder="ضع الرابط هنا">
+    </div>
+
+    <div class="actions">
+      <button type="button" onclick="copyCustody()">📋 نسخ نموذج تسليم العهدة</button>
+      <button type="button" onclick="copyPayment()">🏧 نسخ روم السداد</button>
+      <button type="button" onclick="copyAffairs()">🗂️ نسخ نموذج روم مواضيع الشؤون</button>
+      <button type="button" onclick="copyBanner()">🖼️ نسخ البانر</button>
+      <button type="button" onclick="copyDecree()">👮 نسخ صادر الشؤون</button>
+      <button type="button" onclick="copyDividerBanner()">🖼️ نسخ بانر الفاصل</button>
+    </div>
+
+    <a class="back-link" href="index.html">⬅ رجوع للقائمة الرئيسية</a>
+  </div>
+
+  <div class="toast" id="toast">تم النسخ بنجاح</div>
+
+  <script>
+    function getValues() {
+      const rank = document.querySelector('input[name="rank"]:checked').value;
+      const rawCode = document.getElementById('militaryCode').value.trim();
+      const militaryCode = rawCode ? `P-${rawCode}` : '';
+      return {
+        rank,
+        militaryId: document.getElementById('militaryId').value,
+        militaryName: document.getElementById('militaryName').value,
+        militaryCode,
+        resignReason: document.getElementById('resignReason').value,
+        dismissReason: document.getElementById('dismissReason').value,
+        custodyLink: document.getElementById('custodyLink').value,
+        finesLink: document.getElementById('finesLink').value,
+        decreeNumber: document.getElementById('decreeNumber').value,
+      };
+    }
+
+    function getSaudiDate() {
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Riyadh',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).formatToParts(new Date());
+      const y = parts.find(p => p.type === 'year').value;
+      const m = parts.find(p => p.type === 'month').value;
+      const d = parts.find(p => p.type === 'day').value;
+      return `${y}/${m}/${d}`;
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(showToast).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast();
+      });
+    }
+
+    function copyCustody() {
+      const v = getValues();
+      const text = `**اســم العسكري :   <@${v.militaryId}>**
+
+الـــمـــوضــوع : تسليم عهدة
+
+تــاريــخ تــســلــيــم الــعــهــدة : ${getSaudiDate()}
+
+السبب : ${v.resignReason}
+
+ترسل نسخة لـ <@&1071933319362654329>`;
+      copyToClipboard(text);
+    }
+
+    function copyPayment() {
+      const v = getValues();
+      const text = `**اســم الــعسكـري مـنشـن : <@${v.militaryId}>**
+
+مبـلـغ الـغرامـة : مليون
+
+الــسـبب : حكم عسكري
+
+تـرسـل نـسخـة لـ <@&1071933319362654329>`;
+      copyToClipboard(text);
+    }
+
+    function copyAffairs() {
+      const v = getValues();
+      const rankRoleId = v.rank === 'جندي' ? '1071933309707370536' : '1071933309157920768';
+      const text = `**الموضوع : فصل برتبة : <@&${rankRoleId}>**
+
+**الاسم منشن :** <@${v.militaryId}>
+
+**الاسم بدون منشن: [${v.militaryCode}] ${v.militaryName}**
+
+**سبب الفصل : [الصادر](${v.dismissReason})**
+
+**مستحق منع : ✅**
+
+**العهدة : [روم المشترك](${v.custodyLink})**
+
+**الغرامات : [سداد حكم عسكري](${v.finesLink})**
+
+**تاريخ الفصل : ${getSaudiDate()}**
+
+ترسل نسخة لـ : || <@&1071933319362654329> ||`;
+      copyToClipboard(text);
+    }
+
+    function copyBanner() {
+      copyToClipboard('https://i.postimg.cc/1tyJsDJW/estqala.gif');
+    }
+
+    function copyDividerBanner() {
+      copyToClipboard('https://cdn.discordapp.com/attachments/1389686614103687259/1406067873079890041/98536f766a964b62.gif');
+    }
+
+    function copyDecree() {
+      const v = getValues();
+      const rankRoleId = v.rank === 'جندي' ? '1071933309707370536' : '1071933309157920768';
+      const text = `**رقم الصادر: ${v.decreeNumber}**
+
+**﷽**
+
+**قـرار صـادر من مـكتب الشـؤون الإداريـة رقـم ( ${v.decreeNumber}) : **
+
+**ينـص علـى قبول إستقالة العسـكري المحتـرم برتبة**
+
+<@&${rankRoleId}> <@${v.militaryId}>
+
+**[${v.militaryCode}] ${v.militaryName}**
+
+**غرامــة مليـون + منـع توظيـف 14 يوم **
+
+**شكراً لما قدمته من جهود و تعب وعنا وفقك الله و نتمنى لك الخير و السعادة**
+
+**ترسل نسخة للـ **<@&1071933319362654329>
+
+**توقيع :**
+
+<@&1071933294473662505>
+
+**مـــديــر مـكـتـب **<@&1071933319362654329>
+
+<@697432773639536661>
+
+**نــائـب مـديـر مـكـتـب **<@&1071933319362654329>
+
+<@432968749478445066>
+
+**إعـتـماد ✍🏻 :**
+
+<@&1071933293865480192>
+
+@saleh90092
+
+<@&1071933294473662505>
+
+@r6.3`;
+      copyToClipboard(text);
+    }
+  </script>
+</body>
+</html>
